@@ -29,5 +29,5 @@
 ## 3.2.2 Производство брака
 ![Негативные сценарии](diagrams/scenariob2.PNG)
 ## 4. Архитектурная схема
-!(diagrams/arch.PNG)
+![9](diagrams/arch.PNG)
 
