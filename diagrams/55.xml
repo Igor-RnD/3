@@ -1,0 +1,60 @@
+<mxfile>
+  <diagram name="Архитектура v2">
+    <mxGraphModel dx="1500" dy="900" grid="1" gridSize="10">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- Сущности -->
+        <mxCell id="db" value="База данных" style="shape=cylinder3;fillColor=#FF9999;strokeColor=#FF0000;" vertex="1" parent="1">
+          <mxGeometry x="800" y="300" width="120" height="90" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="robot" value="Робот-фармацевт" style="rounded=1;fillColor=#99FF99;strokeColor=#009900;" vertex="1" parent="1">
+          <mxGeometry x="450" y="300" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="controller" value="Контроллер" style="rounded=1;fillColor=#007700;strokeColor=#005500;" vertex="1" parent="1">
+          <mxGeometry x="450" y="500" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="auth" value="Аутентификация" style="rounded=1;fillColor=#99FF99;strokeColor=#009900;" vertex="1" parent="1">
+          <mxGeometry x="450" y="100" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="hsm" value="HSM" style="shape=rhombus;fillColor=#FFFF99;strokeColor=#FFCC00;" vertex="1" parent="1">
+          <mxGeometry x="700" y="150" width="90" height="90" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="backup_robot" value="Резервный робот" style="rounded=1;fillColor=#99FF99;strokeColor=#009900;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="450" y="650" width="130" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- Связи -->
+        <mxCell id="conn1" value="Запрос данных" style="endArrow=classic;html=1;strokeColor=#FF0000;strokeWidth=2;" edge="1" parent="1" source="robot" target="db">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="conn2" value="Ответ" style="endArrow=classic;html=1;strokeColor=#FF0000;strokeWidth=2;" edge="1" parent="1" source="db" target="robot">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="conn3" value="Инструкции (ECDSA)" style="endArrow=classic;html=1;strokeColor=#00CC00;strokeWidth=3;" edge="1" parent="1" source="robot" target="controller">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="conn4" value="Проверка (2FA)" style="endArrow=classic;html=1;strokeColor=#00CC00;strokeWidth=3;" edge="1" parent="1" source="auth" target="robot">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="conn5" value="Шифрование" style="endArrow=classic;html=1;strokeColor=#FFCC00;strokeWidth=2;" edge="1" parent="1" source="hsm" target="db">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="conn6" value="Резервное переключение" style="endArrow=classic;html=1;strokeColor=#009900;strokeWidth=2;dashed=1;" edge="1" parent="1" source="robot" target="backup_robot">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
