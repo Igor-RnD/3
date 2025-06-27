@@ -89,7 +89,7 @@
 | Датчик состава                 | Доверенный, повышает целостность    | SS                     | Сбой проверки доступности может нарушить ЦБ1                                    |
 ## 9. Политика архитектуры с монитором
 ![Архитектура](diagrams/монитор.PNG) 
-Код политики
+## 10. Код политики
     def check_policy(event_id, details):
     authorized = False
     print(f"[info] checking policies for event {event_id}: "
