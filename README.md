@@ -90,7 +90,7 @@
 ## 9. Политика архитектуры с монитором
 ![Архитектура](diagrams/монитор.PNG) 
 Код политики
-def check_policy(event_id, details):
+    def check_policy(event_id, details):
     authorized = False
     print(f"[info] checking policies for event {event_id}: "
           f"{details['source']} → {details['deliver_to']}: {details['operation']}")
