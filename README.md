@@ -87,5 +87,68 @@
 | База данных рецептов           | Недоверенный    | MM                     | Уязвимость базы может привести к утечке данных, нарушая ЦБ2                     |
 | Робот                          | Недоверенный    | MM                     | Возможны технические сбои робота, влияющие на производственный процесс                 |
 | Датчик состава                 | Доверенный, повышает целостность    | SS                     | Сбой проверки доступности может нарушить ЦБ1                                    |
+## 9. Политика архитектуры с монитором
+![Архитектура](diagrams/монитор.PNG) 
+Код политики
+def check_policy(event_id, details):
+    authorized = False
+    print(f"[info] checking policies for event {event_id}: "
+          f"{details['source']} → {details['deliver_to']}: {details['operation']}")
+
+    src = details['source']
+    dst = details['deliver_to']
+    op = details['operation']
+
+    # Пациент -> Оператор: запрос на получение лекарства
+    if src == 'пациент' and dst == 'оператор' and op == 'запрос_лекарства':
+        authorized = True
+
+    # Оператор -> Аутентификация: ввод рецепта
+    if src == 'оператор' and dst == 'аутентификация' and op == 'проверка_2FA':
+        authorized = True
+
+    # Аутентификация -> БД: запись зашифрованного рецепта
+    if src == 'аутентификация' and dst == 'база_данных' and op == 'сохранение_рецепта':
+        authorized = True
+
+    # БД -> HSM: запрос расшифровки/подписи рецепта
+    if src == 'база_данных' and dst == 'hsm' and op == 'расшифровка_рецепта':
+        if details.get('signed', False):
+            authorized = True
+
+    # HSM -> Контроллер: передача проверенного рецепта
+    if src == 'hsm' and dst == 'контроллер' and op == 'рецепт_подписан':
+        authorized = True
+
+    # Контроллер -> HSM: запрос подписи команды на производство
+    if src == 'контроллер' and dst == 'hsm' and op == 'подписать_команду':
+        authorized = True
+
+    # HSM -> Робот: команда на производство
+    if src == 'hsm' and dst == 'робот' and op == 'команда_производство':
+        authorized = True
+
+    # Робот -> Датчик состава: проверка результата
+    if src == 'робот' and dst == 'датчик_состава' and op == 'анализ_лекарства':
+        authorized = True
+
+    # Датчик состава -> HSM: подписание состава
+    if src == 'датчик_состава' and dst == 'hsm' and op == 'подписать_состав':
+        if details.get('valid', False):
+            authorized = True
+
+    # HSM -> Робот: разрешение на выдачу
+    if src == 'hsm' and dst == 'робот' and op == 'разрешить_выдачу':
+        authorized = True
+
+    # Робот -> Оператор: выдача лекарства
+    if src == 'робот' and dst == 'оператор' and op == 'лекарство_готово':
+        authorized = True
+
+    # Оператор -> Пациент: передача лекарства
+    if src == 'оператор' and dst == 'пациент' and op == 'выдать_лекарство':
+        authorized = True
+
+    return authorized
 
 
